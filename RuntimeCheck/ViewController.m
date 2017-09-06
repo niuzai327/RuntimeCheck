@@ -15,13 +15,16 @@
 #import <objc/runtime.h>
 #import "MyTableView.h"
 #import "MyCycleView.h"
-@interface ViewController ()<MyDelegate,MyTableViewDataSource,MyTableViewDelegate>
+#import "CustomTableView.h"
+#import "CustomCell.h"
+@interface ViewController ()<MyDelegate,MyTableViewDataSource,MyTableViewDelegate,CustomTableViewDataSource,UIScrollViewDelegate>
 {
     UIImageView *imageView;
 }
 
 @property (strong, nonatomic) MyTableView *tableView;
 @property (strong, nonatomic) MyCycleView *cycleView;
+@property (nonatomic, strong) CustomTableView *customTableView;
 
 //@property (nonatomic, assign) id <MyDelegate> delegate;
 
@@ -94,7 +97,7 @@
 //    _tableView.dataSource = self;
 //    [self.view addSubview:_tableView];
 //    [_tableView reloadData];
-    
+    /*
     NSMutableArray *imageArr = [NSMutableArray array];
     for (int i = 1; i <= 6; i++) {
         UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"cycle_image%ld.jpg",(long)i]];
@@ -103,6 +106,14 @@
     _cycleView = [[MyCycleView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 200) imageArr:[imageArr copy]];
     _cycleView.cycleTime = 3.0f;
     [self.view addSubview:_cycleView];
+     */
+    
+    _customTableView = [[CustomTableView alloc] initWithFrame:self.view.bounds];
+    _customTableView.backgroundColor = [UIColor grayColor];
+    _customTableView.dataSource = self;
+    _customTableView.delegate = self;
+    [_customTableView reloadData];
+    [self.view addSubview:_customTableView];
     
 }
 
@@ -206,6 +217,7 @@
 }
  */
 
+/*
 #pragma mark -- MyTableViewDelegate & MyTableViewDataSource
 - (NSInteger)tableView:(MyTableView *)tableView numberOfRowsInSection:(NSInteger)section{
     return 30;
@@ -225,6 +237,28 @@
 
 - (CGFloat)tableView:(MyTableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     return 100;
+}
+*/
+#pragma mark --CustomTableViewDataSource
+- (NSInteger)numberOfRows{
+    return 100;
+}
+
+- (UITableViewCell *)tableView:(CustomTableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    static NSString *cellId = @"CustomCellId";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellId];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellId];
+//        cell.reuseIdentifier = @"CustomCellId";
+        cell.backgroundColor = [UIColor redColor];
+    }
+    cell.textLabel.text = [NSString stringWithFormat:@"我是第%ld行",(long)indexPath.row];
+    NSLog(@"%@",cell.textLabel.text);
+    return cell;
+}
+
+- (CGFloat)heightForRowInTableView{
+    return 50;
 }
 
 

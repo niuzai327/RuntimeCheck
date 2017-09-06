@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SecondViewController : UIViewController
+@interface SecondViewController : UIViewController<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, weak) NSString *str;
+@property (nonatomic, strong) UITableView *tableView;
 
 @end
